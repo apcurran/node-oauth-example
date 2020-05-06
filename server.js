@@ -1,14 +1,19 @@
 "use strict";
 
+require('dotenv').config();
+
 const express = require("express");
 const expressLayouts = require("express-ejs-layouts");
 const app = express();
 const PORT = process.env.PORT || 5000;
-
-require('dotenv').config()
-
+const passportSetup = require("./config/passport-setup");
+const mongoose = require("mongoose");
 // Routes
 const authRoutes = require("./routes/auth-routes");
+
+mongoose.connect(process.env.DB_URI, { useNewUrlParser: true, useUnifiedTopology: true }, () => {
+    console.log("Connected to mongodb");
+});
 
 // Setup view engine
 app.set("view engine", "ejs");
