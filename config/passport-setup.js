@@ -8,11 +8,11 @@ passport.serializeUser((user, done) => {
     done(null, user.id); // user id from mongodb
 });
 
-passport.deserializeUser((user, done) => {
+passport.deserializeUser((id, done) => {
     User
         .findById(id)
         .then(user => {
-            done(null, user.id);
+            done(null, user);
         });
 });
 

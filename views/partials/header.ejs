@@ -2,11 +2,17 @@
     <nav class="nav">
         <a href="/" class="nav__logo">OAuth</a>
         <ul class="nav__list">
+            <% if (locals.user) { %>
+                <li class="nav__item">
+                    <a href="/auth/logout" class="nav__link">Log Out</a>
+                </li>
+            <% } else { %>
+                <li class="nav__item">
+                    <a href="/auth/login" class="nav__link">Log In</a>
+                </li>
+            <% } %> 
             <li class="nav__item">
-                <a href="/auth/logout" class="nav__link">Log Out</a>
-            </li>
-            <li class="nav__item">
-                <a href="/auth/login" class="nav__link">Log In</a>
+                <a href="/profile" class="nav__link">Profile</a>
             </li>
         </ul>
     </nav>
