@@ -4,6 +4,18 @@ const passport = require("passport");
 const GoogleStrategy = require("passport-google-oauth2").Strategy;
 const User = require("../models/user-model");
 
+passport.serializeUser((user, done) => {
+    done(null, user.id); // user id from mongodb
+});
+
+passport.deserializeUser((user, done) => {
+    User
+        .findById(id)
+        .then(user => {
+            done(null, user.id);
+        });
+});
+
 passport.use(new GoogleStrategy(
     {
         // Options for the Google Strat
@@ -12,11 +24,12 @@ passport.use(new GoogleStrategy(
         clientSecret: process.env.GOOGLE_SECRET
     },
     (accessToken, refreshToken, profile, done) => {
-        User.findOne({ googleId: profile.id })
+        User
+        .findOne({ googleId: profile.id })
         .then(existingUser => {
             if (existingUser) {
                 // Already have the user
-                console.log(`User is ${existingUser}`);
+                done(null, existingUser);
             } else {
                 // If not, create user in db
                 new User({
@@ -24,7 +37,7 @@ passport.use(new GoogleStrategy(
                     googleId: profile.id
                 })
                 .save()
-                .then(user => console.log(`New user created ${user}`));
+                .then(newUser => done(null, newUser));
             }
         })
 
