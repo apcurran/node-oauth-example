@@ -5,6 +5,8 @@ const expressLayouts = require("express-ejs-layouts");
 const app = express();
 const PORT = process.env.PORT || 5000;
 
+require('dotenv').config()
+
 // Routes
 const authRoutes = require("./routes/auth-routes");
 
