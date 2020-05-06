@@ -28,13 +28,15 @@ passport.use(new GoogleStrategy(
         .findOne({ googleId: profile.id })
         .then(existingUser => {
             if (existingUser) {
+                console.log(profile._json.picture);
                 // Already have the user
                 done(null, existingUser);
             } else {
                 // If not, create user in db
                 new User({
                     username: profile.displayName,
-                    googleId: profile.id
+                    googleId: profile.id,
+                    thumbnail: profile.picture
                 })
                 .save()
                 .then(newUser => done(null, newUser));
