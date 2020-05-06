@@ -2,6 +2,7 @@
 
 const passport = require("passport");
 const GoogleStrategy = require("passport-google-oauth2").Strategy;
+const User = require("../models/user-model");
 
 passport.use(new GoogleStrategy(
     {
@@ -11,8 +12,21 @@ passport.use(new GoogleStrategy(
         clientSecret: process.env.GOOGLE_SECRET
     },
     (accessToken, refreshToken, profile, done) => {
-        // passport callback func
-        console.log("passport callback fired");
-        console.log(profile);
+        User.findOne({ googleId: profile.id })
+        .then(existingUser => {
+            if (existingUser) {
+                // Already have the user
+                console.log(`User is ${existingUser}`);
+            } else {
+                // If not, create user in db
+                new User({
+                    username: profile.displayName,
+                    googleId: profile.id
+                })
+                .save()
+                .then(user => console.log(`New user created ${user}`));
+            }
+        })
+
     })
 );
